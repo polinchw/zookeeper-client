@@ -1,20 +1,38 @@
 package com.bpe.zookeeper.client;
 
+import org.apache.curator.test.TestingServer;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = App.class)
-@WebAppConfiguration
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
+import static org.assertj.core.api.Assertions.assertThat;
 public class HelloControllerTest {
 
     @Test
-    public void testIt() throws Exception {
-        assert true;
-    }
+	public void contextLoads() throws Exception {
+		int zkPort = 9030;
+		TestingServer server = new TestingServer(zkPort);
+
+		int port = 9031;
+
+		ConfigurableApplicationContext context = new SpringApplicationBuilder(
+				HelloControllerTest.class).run("--server.port=" + port,
+						"--spring.config.use-legacy-processing=true",
+						"--management.endpoints.web.exposure.include=*",
+						"--spring.cloud.zookeeper.connect-string=localhost:" + zkPort);
+
+		ResponseEntity<String> response = new TestRestTemplate()
+				.getForEntity("http://localhost:" + port + "/hi", String.class);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+		context.close();
+		server.close();
+	}
+
 
 
 }
