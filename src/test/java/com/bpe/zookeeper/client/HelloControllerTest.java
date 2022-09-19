@@ -20,7 +20,7 @@ public class HelloControllerTest {
 		int port = 9031;
 
 		ConfigurableApplicationContext context = new SpringApplicationBuilder(
-				HelloControllerTest.class).run("--server.port=" + port,
+				App.class).run("--server.port=" + port,
 						"--spring.config.use-legacy-processing=true",
 						"--management.endpoints.web.exposure.include=*",
 						"--spring.cloud.zookeeper.connect-string=localhost:" + zkPort);
