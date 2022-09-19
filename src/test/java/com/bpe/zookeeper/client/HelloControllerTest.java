@@ -10,10 +10,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertTrue;
 public class HelloControllerTest {
 
     @Test
-	public void contextLoads() throws Exception {
+	public void testIt() throws Exception {
 		int zkPort = 9030;
 		TestingServer server = new TestingServer(zkPort);
 
@@ -32,6 +33,7 @@ public class HelloControllerTest {
 		context.close();
 		server.close();
 	}
+
 
 
 

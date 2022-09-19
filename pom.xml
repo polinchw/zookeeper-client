@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
 
     <groupId>com.bpe.zookeeper.client</groupId>
     <artifactId>zookeeper-client</artifactId>
@@ -9,11 +11,11 @@
 
     <name>Zookeeper Client (from https://github.com/making/spring-boot-blank)</name>
 
-    <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.2.7.RELEASE</version>
-    </parent>
+	<parent>
+		<groupId>org.springframework.cloud</groupId>
+		<artifactId>spring-cloud-build</artifactId>
+		<version>3.1.4</version>
+	</parent>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -22,8 +24,61 @@
         <lombok.version>1.14.8</lombok.version>
         <log4jdbc.log4j2.version>1.16</log4jdbc.log4j2.version>
         <rest.assured.version>2.3.3</rest.assured.version>
-        <spring-cloud-commons.version>3.1.3</spring-cloud-commons.version>
+        <spring-cloud-build.version>3.1.4</spring-cloud-build.version>
+		<spring-cloud-commons.version>3.1.4</spring-cloud-commons.version>
+		<spring-cloud-config.version>3.1.4</spring-cloud-config.version>
+		<spring-cloud-openfeign.version>3.1.4</spring-cloud-openfeign.version>
     </properties>
+
+    <dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-zookeeper-dependencies</artifactId>
+				<version>3.1.3</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>com.jayway.awaitility</groupId>
+				<artifactId>awaitility</artifactId>
+				<version>1.7.0</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>com.toomuchcoding.jsonassert</groupId>
+				<artifactId>jsonassert</artifactId>
+				<version>0.4.14</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-commons-dependencies</artifactId>
+				<version>${spring-cloud-commons.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-config-dependencies</artifactId>
+				<version>${spring-cloud-config.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-openfeign-dependencies</artifactId>
+				<version>${spring-cloud-openfeign.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-test-support</artifactId>
+				<version>${spring-cloud-commons.version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
     <dependencies>
         <dependency>
@@ -32,8 +87,19 @@
             <version>3.23.1</version>
         </dependency>
         <dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot</artifactId>
+            <version>2.7.3</version>
+		</dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
+            <version>2.7.3</version>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+            <version>2.7.3</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
@@ -50,6 +116,11 @@
             <artifactId>spring-boot-starter-test</artifactId>
         </dependency>
         <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13.2</version>
+        </dependency>
+        <dependency>
             <groupId>org.apache.curator</groupId>
             <artifactId>curator-test</artifactId>
             <version>5.3.0</version>
@@ -58,6 +129,7 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
+            <version>2.7.3</version>
 			<scope>test</scope>
 		</dependency>
         <dependency>
@@ -67,20 +139,96 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.springframework</groupId>
-                        <artifactId>springloaded</artifactId>
-                        <version>${spring-loaded.version}</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
-        </plugins>
-    </build>
+    <!-- <build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<configuration>
+						<useFile>false</useFile>
+						<includes>
+							<include>**/*Spec.*</include>
+							<include>**/*Tests.*</include>
+							<include>**/*Test.*</include>
+						</includes>
+						<excludes>
+							<exclude>**/Abstract*Spec.*</exclude>
+							<exclude>**/Abstract*Tests.*</exclude>
+							<exclude>**/Abstract*Test.*</exclude>
+						</excludes>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-checkstyle-plugin</artifactId>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build> -->
+
+    <profiles>
+		<profile>
+			<id>spring</id>
+			<repositories>
+				<repository>
+					<id>spring-snapshots</id>
+					<name>Spring Snapshots</name>
+					<url>https://repo.spring.io/snapshot</url>
+					<snapshots>
+						<enabled>true</enabled>
+					</snapshots>
+					<releases>
+						<enabled>true</enabled>
+					</releases>
+				</repository>
+				<repository>
+					<id>spring-milestones</id>
+					<name>Spring Milestones</name>
+					<url>https://repo.spring.io/milestone</url>
+					<snapshots>
+						<enabled>true</enabled>
+					</snapshots>
+				</repository>
+				<repository>
+					<id>spring-releases</id>
+					<name>Spring Releases</name>
+					<url>https://repo.spring.io/release</url>
+					<snapshots>
+						<enabled>true</enabled>
+					</snapshots>
+				</repository>
+			</repositories>
+			<pluginRepositories>
+				<pluginRepository>
+					<id>spring-snapshots</id>
+					<name>Spring Snapshots</name>
+					<url>https://repo.spring.io/snapshot</url>
+					<snapshots>
+						<enabled>true</enabled>
+					</snapshots>
+					<releases>
+						<enabled>true</enabled>
+					</releases>
+				</pluginRepository>
+				<pluginRepository>
+					<id>spring-milestones</id>
+					<name>Spring Milestones</name>
+					<url>https://repo.spring.io/milestone</url>
+					<snapshots>
+						<enabled>true</enabled>
+					</snapshots>
+				</pluginRepository>
+				<pluginRepository>
+					<id>spring-releases</id>
+					<name>Spring Releases</name>
+					<url>https://repo.spring.io/release</url>
+					<snapshots>
+						<enabled>true</enabled>
+					</snapshots>
+				</pluginRepository>
+			</pluginRepositories>
+		</profile>
+	</profiles>
+
 
 </project>
