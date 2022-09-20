@@ -1,6 +1,7 @@
 package com.bpe.zookeeper.client;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
 
@@ -15,10 +16,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-public class TestHelloController {
+public class AppTests {
 
 	@Test
 	public void contextLoads() {
+		assertEquals("yes", "no");
 	}
 
     @Test
