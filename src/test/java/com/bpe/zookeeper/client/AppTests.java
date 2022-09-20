@@ -12,11 +12,6 @@ import org.springframework.http.ResponseEntity;
 
 public class AppTests {
 
-	@Test
-	public void contextLoads() {
-		assertEquals("yes", "no");
-	}
-
     @Test
 	public void testMethod() throws Exception {
 
