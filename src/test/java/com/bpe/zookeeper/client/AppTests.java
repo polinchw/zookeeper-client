@@ -27,7 +27,7 @@ public class AppTests {
 						"--spring.cloud.zookeeper.connect-string=localhost:" + zkPort);
 
 		ResponseEntity<String> response = new TestRestTemplate()
-				.getForEntity("http://localhost:" + port + "/hi", String.class);
+				.getForEntity("http://localhost:" + port + "/", String.class);
 		assertEquals(response.getStatusCode(), HttpStatus.OK);
 
 		context.close();
